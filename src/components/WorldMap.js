@@ -66,21 +66,16 @@ class WorldMap extends Component {
                 return axios.get(url);
             });
 
-            axios
-                .all(urls)
-                .then(
-                    axios.spread((...args) => {
-                        return args.map(item => item.data);
-                    })
-                )
+            Promise.all(urls)
                 .then(res => {
+                    const arr = res.map(sat => sat.data);
                     this.setState({
                         isLoading: false,
                         isDrawing: true
                     });
 
                     if (!prevState.isDrawing) {
-                        this.track(res);
+                        this.track(arr);
                     } else {
                         const oHint = document.getElementsByClassName("hint")[0];
                         oHint.innerHTML =
@@ -90,6 +85,31 @@ class WorldMap extends Component {
                 .catch(e => {
                     console.log("err in fetch satellite position -> ", e.message);
                 });
+
+            // axios
+            //     .all(urls)
+            //     .then(
+            //         axios.spread((...args) => {
+            //             return args.map(item => item.data);
+            //         })
+            //     )
+            //     .then(res => {
+            //         this.setState({
+            //             isLoading: false,
+            //             isDrawing: true
+            //         });
+            //
+            //         if (!prevState.isDrawing) {
+            //             this.track(res);
+            //         } else {
+            //             const oHint = document.getElementsByClassName("hint")[0];
+            //             oHint.innerHTML =
+            //                 "Please wait for these satellite animation to finish before selection new ones!";
+            //         }
+            //     })
+            //     .catch(e => {
+            //         console.log("err in fetch satellite position -> ", e.message);
+            //     });
         }
     }
 
