@@ -27,11 +27,15 @@ class SatList extends Component {
         }
 
         if (!checked && found) {
-            selected = selected.filter(entry => {
-                return entry.satid !== item.satid;
-            });
+            selected = selected.filter(entry => entry.satid !== item.satid );
         }
         return selected;
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(prevProps.satInfo !== this.props.satInfo) {
+            this.setState({selected: []})
+        }
     }
 
     showSatMap = () => {
@@ -41,6 +45,7 @@ class SatList extends Component {
     render() {
         const satList = this.props.satInfo ? this.props.satInfo.above : [];
         const {isLoad} = this.props;
+
         return (
             <div className="sat-list-box">
                 <div className="btn-container">
